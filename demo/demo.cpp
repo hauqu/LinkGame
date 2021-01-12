@@ -1,6 +1,10 @@
 #include"Graph.h"
 #include<conio.h>
 #include<graphics.h>
+/*
+下一步使用鼠标逻辑测试
+
+*/
 using namespace std;
 const int K = 40;
 Graph test = Graph(10, 10, K);
