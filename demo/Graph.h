@@ -283,6 +283,7 @@ vector<node> Graph::search_two_inflection(int x1, int y1, int x2, int y2)
 bool Graph::remove(int x1, int y1, int x2, int y2, vector<node>& t)
 {
 	if (g[x1][y1].d != g[x2][y2].d) return false;
+	if (g[x1][y1].d ==0|| g[x2][y2].d==0) return false;
 
 	if (search_horizontal(x1, y1, x2, y2) == true ||
 		search_vertical(x1, y1, x2, y2) == true)
