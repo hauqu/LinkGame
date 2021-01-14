@@ -45,11 +45,12 @@ public:
 	*/
 	Graph(int w, int h, int k);
 	bool readMap(string name);
-	bool search_direct(int x1, int y1, int x2, int y2);
-	bool search_vertical(int x1, int y1, int x2, int y2);
-	bool search_horizontal(int x1, int y1, int x2, int y2);
-	vector<node> search_one_inflection(int x1, int y1, int x2, int y2);
-	vector<node> search_two_inflection(int x1, int y1, int x2, int y2);
+	void creatMap(int mx,int K);
+	bool search_direct(int x1, int y1, int x2, int y2);//直接连接
+	bool search_vertical(int x1, int y1, int x2, int y2);//竖直无障碍
+	bool search_horizontal(int x1, int y1, int x2, int y2);//水平无障碍
+	vector<node> search_one_inflection(int x1, int y1, int x2, int y2);//一拐点
+	vector<node> search_two_inflection(int x1, int y1, int x2, int y2);//两拐点
 
 	bool remove(int x1, int y1, int x2, int y2, vector<node>& t);
 private:
@@ -96,7 +97,7 @@ bool Graph::readMap(string name)
 				j--;
 				continue;
 			}
-			g[i][j].d = c - '0';
+			g[j][i].d = c - '0';
 		}
 	}
 	file.close();
@@ -227,54 +228,67 @@ vector<node> Graph::search_two_inflection(int x1, int y1, int x2, int y2)
 	//两个拐点
 	//找到一条直线使得 目标点能够线性连接该直线
 	//一个拐点可以看做直线一端与目标点重合
-
-
 	vector<node>t;
 	node c1;
 	node c2;
-	//找竖直线
 	int xl = min(x1, x2);
 	int xh = max(x1, x2);
-	for (int x = xl + 1; x < xh; x++)
-	{
-		c1 = g[x][y2];
-		c2 = g[x][y1];
-		/*
-		 拐点值 和 出发点不一定相等
-		*/
-		if (search_vertical(x, y2, x2, y2) == true)
-		{
-			if (search_vertical(x, y1, x1, y1) == true)
-			{
-				t.push_back(c1);
-				t.push_back(c2);
-				return t;
-			}
 
+	int gw = g.size();
+	int gh = g[0].size();
+
+	//寻找竖直线 
+	int x=0;
+	for ( x = 0; x < gw; x++)
+	{
+		c1 = g[x][y1];
+		c2 = g[x][y2];
+		if (c1.d == 0&&c2.d==0)
+		{
+			if (search_horizontal(x, y1, x1, y1))
+			{
+				if (search_horizontal(x, y2, x2, y2))
+				{
+					if (search_vertical(x, y1, x, y2))
+					{
+						t.push_back(g[x1][y1]);
+						t.push_back(c1);
+						t.push_back(c2);
+						t.push_back(g[x2][y2]);
+						return t;
+					}
+				}
+			}
 		}
 	}
-	//找水平线
-	int yl = min(y1, y2);
-	int yh = max(y1, y2);
+	int y = 0;
 
-	for (int y = yl + 1; y < yh; y++)
+	for ( y = 0; y < gh; y++)
 	{
-		c1 = g[x1][y];
-		c2 = g[x2][y];
-		if (search_horizontal(x1, y, x1, y1) == true)
+		c1 = g[x2][y];
+		c2 = g[x1][y];
+		if (c1.d == 0 && c2.d == 0)
 		{
-			if (search_vertical(x2, y, x2, y2) == true)
+			if (search_vertical(x2,y,x2,y2))
 			{
-				t.push_back(c1);
-				t.push_back(c2);
-				return t;
+				if (search_vertical(x1, y, x1, y1))
+				{
+					if(search_horizontal(x2,y,x1,y))
+					{
+						t.push_back(g[x1][y1]);
+						t.push_back(c1);
+						t.push_back(c2);
+						t.push_back(g[x2][y2]);
+						return t;
+					}
+				}
 			}
-
 		}
 	}
 
+
+	
 	return t;
-
 
 }
 
@@ -284,6 +298,7 @@ bool Graph::remove(int x1, int y1, int x2, int y2, vector<node>& t)
 {
 	if (g[x1][y1].d != g[x2][y2].d) return false;
 	if (g[x1][y1].d ==0|| g[x2][y2].d==0) return false;
+	if (x1 == x2 && y1 == y2) return false;
 
 	if (search_horizontal(x1, y1, x2, y2) == true ||
 		search_vertical(x1, y1, x2, y2) == true)
@@ -313,8 +328,27 @@ bool Graph::remove(int x1, int y1, int x2, int y2, vector<node>& t)
 	}
 	else {
 
+
 		return true;
 	}
 
 	return false;
+}
+
+inline void Graph::creatMap(int mx,int K)
+{
+	int w = g.size();
+	int h = g[0].size();
+	
+	for (int i = 0; i < w; i++)
+	{
+		for (int j = 0; j < h; j++)
+		{
+			g[i][j].d = rand() % mx;
+			g[i][j].x = i * K;
+			g[i][j].y = j * K;
+		}
+	}
+	
+	
 }

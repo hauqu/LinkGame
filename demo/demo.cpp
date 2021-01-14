@@ -17,6 +17,7 @@ int main()
 	setlinecolor(RGB(128, 128, 128));
 	setorigin(K / 2, K / 2);
 	test.readMap("wfy.txt");
+	test.creatMap(5, K);
 	int x1,y1;
 	int x2, y2;
 	int falg = 0;
@@ -43,9 +44,17 @@ int main()
 					}
 					else if (falg == 1 || falg == 2)
 					{
-						x2 = w;
-						y2 = h;
-						falg = 2;
+							x2 = w;
+							y2 = h;
+							if (x1 == x2 && y1 == y2)
+							{
+								falg = 1;
+							}
+							else
+							{
+								falg = 2;
+							}
+
 					}
 				}
 				if (ms.mkRButton == true)
