@@ -6,7 +6,7 @@
 
 */
 using namespace std;
-const int K = 40;
+const int K = 50;
 
 Graph test = Graph(10, 10, K);
 void DrawGame(void);
@@ -17,7 +17,7 @@ int main()
 	setlinecolor(RGB(128, 128, 128));
 	setorigin(K / 2, K / 2);
 	test.readMap("wfy.txt");
-	test.creatMap(5, K);
+	test.creatMap(10, K);
 	int x1,y1;
 	int x2, y2;
 	int falg = 0;
@@ -31,33 +31,33 @@ int main()
 		{
 			int w = ms.x / K;
 			int h = ms.y / K;
-			if (test.g[w][h].d != 0)
+			if (ms.mkLButton == true && test.g[w][h].d != 0)
 			{
-				if (ms.mkLButton == true)
-				{
 
-					if (falg == 0)
+				if (falg == 0)
+				{
+					x1 = w;
+					y1 = h;
+					falg = 1;
+				}
+				else if (falg == 1 || falg == 2)
+				{
+					x2 = w;
+					y2 = h;
+					if (x1 == x2 && y1 == y2)
 					{
-						x1 = w;
-						y1 = h;
 						falg = 1;
 					}
-					else if (falg == 1 || falg == 2)
+					else
 					{
-							x2 = w;
-							y2 = h;
-							if (x1 == x2 && y1 == y2)
-							{
-								falg = 1;
-							}
-							else
-							{
-								falg = 2;
-							}
-
+						falg = 2;
 					}
+
 				}
-				if (ms.mkRButton == true)
+
+
+			}
+			if (ms.mkRButton == true)
 				{
 					if (falg == 0)
 					{
@@ -74,10 +74,10 @@ int main()
 
 				}
 				//绘制图片
-				DrawGame();
+			DrawGame();
 				//绘制选中框
-				setlinecolor(RED);
-				switch (falg)
+			setlinecolor(RED);
+			switch (falg)
 				{
 				case 0:
 					// do nothing
@@ -96,8 +96,8 @@ int main()
 				default:
 					break;
 				}
-				setlinecolor(RGB(128, 128, 128));
-				if (falg == 2)
+			setlinecolor(RGB(128, 128, 128));
+			if (falg == 2)
 				{
 					t.clear();
 					if (test.remove(x1, y1, x2, y2, t))
@@ -119,7 +119,8 @@ int main()
 				}
 			}
 		}
-	}
+
+
 	DrawGame();
 	_getch();
 	return 0;

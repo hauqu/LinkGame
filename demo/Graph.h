@@ -197,6 +197,8 @@ vector<node>Graph::search_one_inflection(int x1, int y1, int x2, int y2)
 	vector<node>t;
 	node c1 = g[x1][y2];
 	node c2 = g[x2][y1];
+	
+
 	if (c1.d == 0)
 	{
 		if (search_vertical(x1, y2, x1, y1) == true)
@@ -208,11 +210,11 @@ vector<node>Graph::search_one_inflection(int x1, int y1, int x2, int y2)
 			}
 		}
 	}
-	else if (c2.d == 0)
+	 if (c2.d == 0)
 	{
 		if (search_horizontal(x2, y1, x1, y1) == true)
 		{
-			if (search_vertical(x1, y2, x2, y2) == true)
+			if (search_vertical(x2, y1, x2, y2) == true)
 			{
 				t.push_back(c2);
 				return t;
@@ -275,10 +277,10 @@ vector<node> Graph::search_two_inflection(int x1, int y1, int x2, int y2)
 				{
 					if(search_horizontal(x2,y,x1,y))
 					{
-						t.push_back(g[x1][y1]);
+						t.push_back(g[x2][y2]);
 						t.push_back(c1);
 						t.push_back(c2);
-						t.push_back(g[x2][y2]);
+						t.push_back(g[x1][y1]);
 						return t;
 					}
 				}
