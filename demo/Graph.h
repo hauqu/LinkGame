@@ -341,16 +341,39 @@ inline void Graph::creatMap(int mx,int K)
 {
 	int w = g.size();
 	int h = g[0].size();
-	
+	bool falg = 1;
+	int d=0;
 	for (int i = 0; i < w; i++)
 	{
 		for (int j = 0; j < h; j++)
 		{
-			g[i][j].d = rand() % mx;
+			if (falg)
+			{
+				d = rand()%mx;
+
+			}
+			g[i][j].d = d;
 			g[i][j].x = i * K;
 			g[i][j].y = j * K;
+			falg = !falg;
 		}
+	}//生成成对
+	int x1; int y1;
+	int x2; int y2;
+
+	for (int i = 0; i < w*h*10; i++)
+	{
+		x1 = rand() % w;
+		x2 = rand() % w;
+		y1 = rand() % h;
+		y2 = rand() % h;
+		int d = g[x2][y2].d;
+		g[x2][y2].d = g[x1][y1].d;
+		g[x1][y1].d = d;
+
 	}
+
+
 	
 	
 }
