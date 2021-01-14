@@ -3,21 +3,32 @@
 #include<graphics.h>
 /*
 下一步使用鼠标逻辑测试
+测试完毕
+算法全部正常
 
 */
-using namespace std;
-const int K = 50;
 
-Graph test = Graph(10, 10, K);
+using namespace std;
+const int K = 60;
+const int MapW = 10;
+const int MapH = 10;
+Graph test = Graph(MapW, MapH, K);
 void DrawGame(void);
+const int cateNumber = 10;
+IMAGE picture[cateNumber];
+IMAGE win;
+void load();
 int main()
 {
 
-	initgraph(10*K, 10*K);
+	initgraph(MapW*K, MapH*K);
+	load();
 	setlinecolor(RGB(128, 128, 128));
 	setorigin(K / 2, K / 2);
 	test.readMap("wfy.txt");
-	test.creatMap(10, K);
+	test.creatMap(cateNumber, K);
+	putimage(0, 0, &win);
+
 	int x1,y1;
 	int x2, y2;
 	int falg = 0;
@@ -102,6 +113,7 @@ int main()
 					t.clear();
 					if (test.remove(x1, y1, x2, y2, t))
 					{
+						
 						test.g[x1][y1].d = 0;
 						test.g[x2][y2].d = 0;
 						for (int i = 0; i < t.size() - 1; i++)
@@ -115,13 +127,19 @@ int main()
 						cleardevice();
 						DrawGame();
 						falg = 0;
+						if (test.winGame())
+						{
+							goto Gameover;
+						}
 					}
 				}
 			}
 		}
 
 
-	DrawGame();
+	Gameover:
+		putimage(0, 0, &win);
+
 	_getch();
 	return 0;
 }
@@ -140,8 +158,28 @@ void DrawGame(void)
 			RECT r = { x - K / 2, y - K / 2, x + K / 2, y + K / 2 };
 			char c = d+'0';
 			rectangle(x - K / 2, y - K / 2, x + K / 2, y + K / 2);
-			if(d!=0)drawtext(c, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+			if (d != 0) {
 
+				drawtext(c, &r, DT_CENTER | DT_VCENTER | DT_SINGLELINE); 
+				putimage(x-K/2, y-K/2, &picture[d]);
+				
+			}
+			
 		}
 	}
+}
+void load()
+{
+	loadimage(&picture[0], "0.jpg", K, K);
+	loadimage(&picture[1], "1.jpg", K, K);
+	loadimage(&picture[2], "2.jpg", K, K);
+	loadimage(&picture[3], "3.jpg", K, K);
+	loadimage(&picture[4], "4.jpg", K, K);
+	loadimage(&picture[5], "5.jpg", K, K);
+	loadimage(&picture[6], "6.jpg", K, K);
+	loadimage(&picture[7], "7.jpg", K, K);
+	loadimage(&picture[8], "8.jpg", K, K);
+	loadimage(&picture[9], "9.jpg", K, K);
+	
+	loadimage(&win, "win.jpg", MapW * K, MapH * K);
 }

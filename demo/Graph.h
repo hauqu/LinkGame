@@ -51,7 +51,7 @@ public:
 	bool search_horizontal(int x1, int y1, int x2, int y2);//水平无障碍
 	vector<node> search_one_inflection(int x1, int y1, int x2, int y2);//一拐点
 	vector<node> search_two_inflection(int x1, int y1, int x2, int y2);//两拐点
-
+	bool winGame();
 	bool remove(int x1, int y1, int x2, int y2, vector<node>& t);
 private:
 	int max(int a, int b)
@@ -376,4 +376,20 @@ inline void Graph::creatMap(int mx,int K)
 
 	
 	
+}
+inline bool Graph::winGame()
+{
+
+	int w = g.size();
+	int h = g[0].size();
+	
+	for (int i = 0; i < w; i++)
+	{
+		for (int j = 0; j < h; j++)
+		{
+			if (g[i][j].d != 0)
+				return false;
+		}
+	}
+	return true;
 }
